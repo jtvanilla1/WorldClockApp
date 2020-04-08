@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:tutorial4/services/world_time.dart';
+import 'dart:convert';
 
 class ChooseLocation extends StatefulWidget {
   @override
@@ -7,10 +9,19 @@ class ChooseLocation extends StatefulWidget {
 }
 
 class _ChooseLocationState extends State<ChooseLocation> {
-
   List<WorldTime> locations = [
     WorldTime(url: 'Europe/London', location: 'London', flag: 'uk.png',),
   ];
+  var _currentItemSelected = 'Select Location';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentItemSelected = (_currentItemSelected == 'Select Location') ? 'Select Location' : _currentItemSelected;
+
+  }
+
 
   void updateTime(index) async {
     WorldTime instance = locations[index];
@@ -25,12 +36,18 @@ class _ChooseLocationState extends State<ChooseLocation> {
     });
   }
 
+  Future<List<String>> getUrls() async{
+    Response response = await get('http://worldtimeapi.org/api/timezone/');
+    var data = jsonDecode(response.body).cast<String>();
 
-  Future<WorldTime> createAlertDialog(BuildContext context){ //catches future quote
-    TextEditingController countryController = new TextEditingController();
-    TextEditingController continentController = new TextEditingController();
+    return data;
+  }
+
+  Future<WorldTime> createAlertDialog(BuildContext context) async{ //catches future quote
+    var _dropDownList = await getUrls(); // get list of locations
 
     return showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context){
           return AlertDialog(
@@ -39,36 +56,27 @@ class _ChooseLocationState extends State<ChooseLocation> {
             ),
             content: Column(
               children: <Widget>[
-                Text('Continent:',),
-                TextField(
-                  controller: continentController,
-                ),
-                Text('City:',),
-                TextField(
-                  controller: countryController,
+                DropdownButton<String>(
+                  hint: Text(_currentItemSelected), // so far unable to update
+                  isExpanded: true,
+                  iconSize: 24,
+                  elevation: 16,
+                  onChanged: (String newValue) {
+                    setState(() {
+                      _currentItemSelected = newValue;
+                    });
+                  },
+                  items: _dropDownList.map((String dropDownStringItem) {
+                    return DropdownMenuItem<String>(
+                      value: dropDownStringItem,
+                      child: Text(dropDownStringItem),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
             actions: <Widget>[
-              MaterialButton(
-                elevation: 5.0,
-                child: Text('Submit'),
-                onPressed: () {//closes popup and passes back worldTime object
-                  String url = '${continentController.text}/${countryController.text}';
-                  String location = '${countryController.text}';
-                  String flag = 'night.jfif';
-                  WorldTime instance = WorldTime(location: location, flag: flag, url: url);
-                  Navigator.of(context).pop(instance);
-                },
-              ),
-              MaterialButton(
-                elevation: 5.0,
-                child: Text('Cancel'),
-                onPressed: () {
 
-                  Navigator.of(context).pop(null);
-                },
-              ),
             ],
           );
         });
@@ -85,7 +93,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: ListView.builder(
+      body: ListView.builder( // scrolling widget, builds children widgets from locations list data
         itemBuilder: (context, index){
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 1,horizontal: 4),
@@ -106,7 +114,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          createAlertDialog(context).then((onValue){ //onValue catches quote
+          createAlertDialog(context).then((onValue){ //onValue catches Quote from the createAlertDialog function
             setState(() {
               locations.add(onValue);
             });
