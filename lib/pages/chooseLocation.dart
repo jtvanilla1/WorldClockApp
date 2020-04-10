@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:tutorial4/services/world_time.dart';
-import 'dart:convert';
+import 'loading.dart';
 
 class ChooseLocation extends StatefulWidget {
   @override
@@ -36,15 +36,7 @@ class _ChooseLocationState extends State<ChooseLocation> {
     });
   }
 
-  Future<List<String>> getUrls() async{
-    Response response = await get('http://worldtimeapi.org/api/timezone/');
-    var data = jsonDecode(response.body).cast<String>();
-
-    return data;
-  }
-
   Future<WorldTime> createAlertDialog(BuildContext context) async{ //catches future quote
-    var _dropDownList = await getUrls(); // get list of locations
 
     return showDialog(
         barrierDismissible: false,
@@ -56,27 +48,36 @@ class _ChooseLocationState extends State<ChooseLocation> {
             ),
             content: Column(
               children: <Widget>[
-                DropdownButton<String>(
-                  hint: Text(_currentItemSelected), // so far unable to update
+                DropdownButton<String>(// so far unable to update
                   isExpanded: true,
                   iconSize: 24,
                   elevation: 16,
-                  onChanged: (String newValue) {
+                  onChanged: (newValue) {
                     setState(() {
                       _currentItemSelected = newValue;
                     });
                   },
-                  items: _dropDownList.map((String dropDownStringItem) {
+                  items: urlData.map((dropDownStringItem) {
                     return DropdownMenuItem<String>(
                       value: dropDownStringItem,
                       child: Text(dropDownStringItem),
                     );
                   }).toList(),
+                  hint: Text('Select Location'),
                 ),
               ],
             ),
             actions: <Widget>[
-
+              MaterialButton(
+                onPressed: (){
+                  setState(() {
+                    Navigator.of(context).pop(null);
+                  });
+                },
+                child: Text(
+                  "Cancel"
+                ),
+              )
             ],
           );
         });

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:tutorial4/routing/routing_constants.dart';
+import 'routing/router.dart' as router;
 
-import 'package:tutorial4/pages/home.dart';
-import 'package:tutorial4/pages/chooseLocation.dart';
-import 'package:tutorial4/pages/loading.dart';
+void main() => runApp(WorldClockApp());
 
-void main() => runApp(MaterialApp(
-  initialRoute: '/',
-  routes: {
-    //think about route paths, and how pages stack on top of each other with routing
-    //think about push/pop in route stacks
-    //--initState(), Build(), Dispose()
-    '/': (context) => Loading(),
-    '/home': (context) => Home(),
-    '/location': (context) => ChooseLocation(),
-  },
-));
-
+class WorldClockApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'World Clock App',
+      onGenerateRoute: router.generateRoute,
+      initialRoute: LoadingRoute,
+    );
+  }
+}

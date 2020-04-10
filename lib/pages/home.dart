@@ -6,19 +6,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   Map data ={};
 
   @override
   Widget build(BuildContext context) {
+    print('home built. receiving ${ModalRoute.of(context).settings.arguments} from loading');
 
-   data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments; //don't update if data already passed back from location page
-   print(data);
+    data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments; //don't update if data already passed back from location page
+    print(data);
 
-   //set background
-   String bgImage= data['isDaytime'] ? 'day.jpg' : 'night.jfif';
-   Color bgColor = data['isDaytime'] ? Colors.blue : Colors.indigo;
-   Color textColor = data['isDaytime'] ? Colors.black : Colors.white;
+    //set background
+    String bgImage= data['isDaytime'] ? 'day.jpg' : 'night.jfif';
+    Color bgColor = data['isDaytime'] ? Colors.blue : Colors.indigo;
+    Color textColor = data['isDaytime'] ? Colors.black : Colors.white;
 
     return Scaffold(
       backgroundColor: bgColor,
