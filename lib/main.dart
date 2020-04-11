@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tutorial4/routing/routing_constants.dart';
+import 'package:WorldClockApp/routing/routing_constants.dart';
 import 'routing/router.dart' as router;
 
 void main() => runApp(WorldClockApp());

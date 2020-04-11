@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tutorial4/services/world_time.dart';
+import 'package:WorldClockApp/services/world_time.dart';
 import 'loading.dart';
 
 class ChooseLocation extends StatefulWidget {
@@ -15,7 +15,6 @@ class _ChooseLocationState extends State<ChooseLocation> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _currentItemSelected = (_currentItemSelected == 'Select Location') ? 'Select Location' : _currentItemSelected;
 

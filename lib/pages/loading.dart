@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
 
-import 'package:tutorial4/routing/routing_constants.dart';
-import 'package:tutorial4/services/world_time.dart';
+import 'package:WorldClockApp/routing/routing_constants.dart';
+import 'package:WorldClockApp/services/world_time.dart';
 
 //overhead variables
 List<String> urlData = [];
