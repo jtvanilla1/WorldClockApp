@@ -10,7 +10,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    print('home built. receiving ${ModalRoute.of(context).settings.arguments} from loading');
+    print('home built. receiving ${ModalRoute.of(context).settings.arguments} from $context');
 
     data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments; //don't update if data already passed back from location page
     print(data);

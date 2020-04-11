@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart';
-import 'package:tutorial4/routing/routing_constants.dart';
 
+import 'package:tutorial4/routing/routing_constants.dart';
 import 'package:tutorial4/services/world_time.dart';
 
 //overhead variables
@@ -17,6 +16,7 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
+
   Future<void> getUrls() async{
     Response response = await get('http://worldtimeapi.org/api/timezone/');
     urlData = jsonDecode(response.body).cast<String>();
@@ -24,11 +24,12 @@ class _LoadingState extends State<Loading> {
   }
 
   void setupWorldTime() async { //default home settings, route to home
-    WorldTime instance = WorldTime(
-        location: 'Berlin', flag: 'germany.png', url: 'Europe/Berlin');
+    WorldTime instance = WorldTime(location: 'Berlin', flag: 'germany.png', url: 'Europe/Berlin');
+
     await instance.getTime();
-    print('loading done, passing ${instance.location} to homeroute');
-    Navigator.pushReplacementNamed(context, HomeRoute, arguments: { //pass map to HomeRoute
+
+    print('loading done, passing ${instance.location} to $HomeRoute from $context');
+    Navigator.pushReplacementNamed(context, '/home', arguments: { //pass map to HomeRoute
       'location': instance.location,
       'flag': instance.flag,
       'time': instance.time,
